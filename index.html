@@ -153,19 +153,7 @@ h1,h2,h3,h4{margin:0 0 .5em;font-weight:600;line-height:1.3}
 </style>
 </head>
 <body>
-<div id="lock" style="position:fixed;inset:0;background:#0D1117;z-index:9999;display:flex;align-items:center;justify-content:center;padding:24px">
-  <div style="max-width:300px;width:100%;text-align:center;font-family:Inter,-apple-system,BlinkMacSystemFont,sans-serif;color:#E6EDF3">
-    <div style="width:54px;height:54px;border-radius:14px;background:#161B22;border:1px solid #30363D;display:flex;align-items:center;justify-content:center;margin:0 auto 14px">
-      <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#58A6FF" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="11" width="14" height="10" rx="2"/><path d="M8 11V8a4 4 0 0 1 8 0v3"/></svg>
-    </div>
-    <div style="font-size:18px;font-weight:600">Security+ Study</div>
-    <div style="color:#8B949E;font-size:13.5px;margin:6px 0 18px">Private — enter your access code</div>
-    <input id="lockpw" type="password" autocomplete="off" placeholder="Access code" style="width:100%;box-sizing:border-box;background:#0D1117;border:1px solid #30363D;border-radius:10px;color:#E6EDF3;padding:11px 13px;font-size:15px;outline:none">
-    <button id="lockbtn" style="width:100%;margin-top:10px;background:#58A6FF;border:none;border-radius:10px;color:#04203f;padding:11px;font-size:15px;font-weight:600;cursor:pointer">Unlock</button>
-    <div id="lockerr" style="color:#F85149;font-size:13px;height:18px;margin-top:8px"></div>
-  </div>
-</div>
-<div id="app" style="display:none">
+<div id="app">
   <div id="backdrop" onclick="document.getElementById('sidebar').classList.remove('open');this.classList.remove('open')"></div>
   <aside id="sidebar"></aside>
   <div style="flex:1;min-width:0;display:flex;flex-direction:column">
@@ -40581,26 +40569,11 @@ function mount(){
 window.addEventListener('hashchange',mount);
 window.addEventListener('flags-changed',function(){updateFlagBadges();if(parseRoute().name==='reviews')mount();});
 
-/* ---------- boot (access-code gated) ---------- */
-function startApp(){
-  document.getElementById('app').style.display='';
-  buildNav();
-  document.getElementById('menuBtn').appendChild(icon('menu',22));
-  document.getElementById('menuBtn').addEventListener('click',function(){document.getElementById('sidebar').classList.toggle('open');document.getElementById('backdrop').classList.toggle('open');});
-  mount();
-}
-(function gate(){
-  var CODE=1968218323;
-  function hsh(s){var h=0;for(var i=0;i<s.length;i++){h=(h*31+s.charCodeAt(i))|0;}return h;}
-  var lock=document.getElementById('lock');
-  function open(){if(lock&&lock.parentNode)lock.parentNode.removeChild(lock);startApp();}
-  if(localStorage.getItem('secplus_ok')==='1'){open();return;}
-  var inp=document.getElementById('lockpw'),btn=document.getElementById('lockbtn'),err=document.getElementById('lockerr');
-  function tryit(){if(hsh(inp.value)===CODE){localStorage.setItem('secplus_ok','1');open();}else{err.textContent='Wrong code — try again';inp.value='';inp.focus();}}
-  btn.addEventListener('click',tryit);
-  inp.addEventListener('keydown',function(e){if(e.key==='Enter')tryit();});
-  setTimeout(function(){inp.focus();},100);
-})();
+/* ---------- boot ---------- */
+buildNav();
+document.getElementById('menuBtn').appendChild(icon('menu',22));
+document.getElementById('menuBtn').addEventListener('click',function(){document.getElementById('sidebar').classList.toggle('open');document.getElementById('backdrop').classList.toggle('open');});
+mount();
 </script>
 </body>
 </html>
